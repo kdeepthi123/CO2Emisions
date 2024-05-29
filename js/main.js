@@ -36,7 +36,7 @@ const colorScale = d3.scaleSequential(d3.interpolateRdYlBu).domain([40, -10]);
 
 // Function to draw the world map
 function drawWorldMap(data, geoData) {
-  const width = 1100, height = 750;
+  const width = 1100, height = 700;
   const projection = d3.geoEquirectangular().scale([width / (2 * Math.PI)]).translate([width / 2, height / 2]);
   const geoPath = d3.geoPath().projection(projection);
   
@@ -62,10 +62,11 @@ function drawWorldMap(data, geoData) {
     .attr('stroke-width', 0.5)
     .on('mousemove', (event, d) => {
       const countryName = d.properties.name;
-      const temp = data.find((c) => c.country === countryName)?.temp || 'No data';
-      showTooltip(event.pageX, event.pageY, `${countryName}: ${temp}°C`);
+          const temp = data.find((c) => c.country === countryName)?.temp || 'No data';
+          showTooltip(event.pageX, event.pageY, `${countryName}: ${temp}°C`);
     })
     .on('mouseleave', hideTooltip);
+    drawLegend();
 }
 
 // Function to set up the year slider
@@ -84,19 +85,97 @@ function setupYearSlider(years, avgTemps, geoData) {
 
 
 
+// // Tooltip functions
+// function showTooltip(x, y, content) {
+//   d3.select('#tooltip')
+//     .style('left', `${x + 10}px`) // Offset for better visibility
+//     .style('top', `${y + 10}px`)
+//     .style('display', 'block')
+//     .html(content);
+// }
+
+// function hideTooltip() {
+//   d3.select('#tooltip').style('display', 'none');
+// }
 // Tooltip functions
 function showTooltip(x, y, content) {
   d3.select('#tooltip')
     .style('left', `${x + 10}px`) // Offset for better visibility
     .style('top', `${y + 10}px`)
-    .style('display', 'block')
+    .style('opacity', 1)
     .html(content);
 }
 
 function hideTooltip() {
-  d3.select('#tooltip').style('display', 'none');
+  d3.select('#tooltip').style('opacity', 0);
 }
 
+// Function to draw the legend
+function drawLegend() {
+  const legendHeight = 250, legendWidth = 20;
+  const legendSvg = d3.select('#legend')
+    .append('svg')
+    .attr('width', legendWidth + 50) // Extra width for text
+    .attr('height', legendHeight)
+    .style('position', 'absolute')
+    .style('right', '30px')
+    .style('top', '195px');
+
+  const defs = legendSvg.append('defs');
+  const linearGradient = defs.append('linearGradient')
+    .attr('id', 'linear-gradient')
+    .attr('x1', '0%')
+    .attr('y1', '0%')
+    .attr('x2', '0%')
+    .attr('y2', '100%');
+
+  linearGradient.selectAll('stop')
+    .data([
+      { offset: '0%', color: d3.interpolateRdYlBu(1) },
+      { offset: '25%', color: d3.interpolateRdYlBu(0.75) },
+      { offset: '50%', color: d3.interpolateRdYlBu(0.5) },
+      { offset: '75%', color: d3.interpolateRdYlBu(0.25) },
+      { offset: '100%', color: d3.interpolateRdYlBu(0) }
+    ])
+    .enter().append('stop')
+    .attr('offset', d => d.offset)
+    .attr('stop-color', d => d.color);
+
+  legendSvg.append('rect')
+    .attr('width', legendWidth)
+    .attr('height', legendHeight)
+    .style('fill', 'url(#linear-gradient)');
+
+  const legendScale = d3.scaleLinear()
+    .domain(colorScale.domain())
+    .range([0, legendHeight]);
+
+  const legendAxis = d3.axisRight(legendScale)
+    .ticks(6)
+    .tickFormat(d3.format(".0f"));
+
+  legendSvg.append('g')
+    .attr('transform', `translate(${legendWidth}, 0)`)
+    .call(legendAxis);
+
+  // Add labels to the legend
+  const labels = [
+    { text: "40°C", offset: 0 },
+    { text: "30°C", offset: 0.25 },
+    { text: "20°C", offset: 0.5 },
+    { text: "10°C", offset: 0.75 },
+    { text: "0°C", offset: 1 },
+    { text: "-10°C", offset: 1.25 }
+  ];
+  legendSvg.selectAll('text.legend-label')
+    .data(labels)
+    .enter().append('text')
+    .attr('class', 'legend-label')
+    .attr('x', legendWidth + 10)
+    .attr('y', d => legendScale(d.offset * 50))
+    .attr('dy', '0.5em')
+    //.text(d => d.text);
+}
 
 function drawTemperatureLineChart(csvFilePath) {
   d3.csv(csvFilePath).then((rawData) => {
