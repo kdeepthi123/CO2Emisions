@@ -36,7 +36,7 @@ const colorScale = d3.scaleSequential(d3.interpolateRdYlBu).domain([40, -10]);
 
 // Function to draw the world map
 function drawWorldMap(data, geoData) {
-  const width = 1200, height = 800;
+  const width = 1100, height = 750;
   const projection = d3.geoEquirectangular().scale([width / (2 * Math.PI)]).translate([width / 2, height / 2]);
   const geoPath = d3.geoPath().projection(projection);
   

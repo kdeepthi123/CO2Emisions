@@ -4,20 +4,86 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Global Climate Dashboard</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.css">
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://unpkg.com/topojson-client@3"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .navbar {
+      background-color: #343a40;
+      color: #fff;
+    }
+    .navbar-brand, .nav-link {
+      color: #fff !important;
+    }
+    .header {
+      background-color: #F8DEBD;
+      padding: 20px;
+      text-align: center;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .header h1 {
+      margin: 0;
+      color: #454444;
+    }
+    .header p {
+      margin: 10px 0 20px;
+      color: #454444;
+    }
+    .header button {
+      padding: 10px 20px;
+      background-color: #454444;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      border-radius: 20px;
+    }
+    .container {
+      margin-top: 20px;
+    }
+    .chart-container {
+      margin-top: 20px;
+    }
+    .dropdown-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    .dropdown-container select,
+    .dropdown-container button {
+      padding: 10px;
+      margin: 0 10px;
+    }
+    #bar_section{
+      margin-top: 150px;
+    }
+    footer {
+      background-color: #343a40;
+      color: #fff;
+      padding: 10px 0;
+      text-align: center;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+    }
+  </style>
 </head>
 
 <body>
   <!-- Navigation Bar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
     <a class="navbar-brand" href="#">Climate Dashboard</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -40,13 +106,12 @@
     </div>
   </nav>
 
-  <!-- Main Content -->
-  <div class="container mt-4">
-    <h1 class="text-center">Global Climate Dashboard</h1>
 
+  <!-- Main Content -->
+  <div class="container">
     <!-- Year Slider -->
     <div class="row my-4">
-      <div class="col">
+      <div class="col text-center">
         <label for="year-slider">Select Year:</label>
         <input id="year-slider" type="range" class="form-control-range" min="1700" max="2020" step="1" value="2000" oninput="document.getElementById('demo').textContent = this.value;">
         <p>Selected Year: <span id="demo">2000</span></p>
@@ -54,36 +119,41 @@
     </div>
 
     <!-- Global Temperatures on Land -->
-    <section id="map_section" class="my-5">
+    <section id="map_section" class="chart-container">
       <h2 class="text-center">Global Temperatures on Land</h2>
       <div id="map_chart" style="height: 800px;"></div>
     </section>
 
     <!-- Temperature Over the Years -->
-    <section id="line_section" class="my-5">
+    <section id="line_section" class="chart-container">
       <h2 class="text-center">Temperature Over the Years</h2>
       <div id="line_chart" style="height: 500px;"></div>
     </section>
 
     <!-- Annual Temperature Trends Over Time -->
-    <section id="scatter_section" class="my-5">
+    <section id="scatter_section" class="chart-container">
       <h2 class="text-center">Annual Temperature Trends Over Time</h2>
       <div id="scatterplot" style="height: 500px;"></div>
     </section>
 
     <!-- Decadal Average Temperatures by Country -->
-    <section id="bar_section" class="my-5">
-      <h2 class="text-center">Decadal Average Temperatures by Country</h2>
-      <div class="form-group">
-        <label for="countrySelect">Select Country:</label>
-        <select id="countrySelect" class="form-control"></select>
-      </div>
-      <div id="bar_chart" style="height: 500px;"></div>
-    </section>
-
-    <!-- Tooltip -->
-    <div id="tooltip" style="position: absolute; background: white; border: 1px solid gray; padding: 5px; display: none;"></div>
+    <!-- Decadal Average Temperatures by Country -->
+<section id="bar_section" class="chart-container my-5 py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-primary mb-0">Decadal Average Temperatures by Country</h2>
+    <div class="form-group mb-0">
+      <label for="countrySelect" class="h5 mr-2">Select Country:</label>
+      <select id="countrySelect" class="form-control d-inline w-auto"></select>
+    </div>
   </div>
+  <div id="bar_chart" class="mt-4 bg-light rounded shadow" style="height: 500px; background-color: #f8f9fa; border: 1px solid #ced4da; border-radius: .25rem;"></div>
+</section>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2024 Climate Dashboard. All rights reserved.
+  </footer>
 
   <script src="js/main.js"></script>
 </body>
