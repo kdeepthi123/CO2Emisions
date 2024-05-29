@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Global Climate Dashboard</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.css">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://unpkg.com/topojson-client@3"></script>
+</head>
+
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Climate Dashboard</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#map_section">Global Temperatures on Land</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#line_section">Temperature Over the Years</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#scatter_section">Annual Temperature Trends</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#bar_section">Decadal Average Temperatures</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container mt-4">
+    <h1 class="text-center">Global Climate Dashboard</h1>
+
+    <!-- Year Slider -->
+    <div class="row my-4">
+      <div class="col">
+        <label for="year-slider">Select Year:</label>
+        <input id="year-slider" type="range" class="form-control-range" min="1700" max="2020" step="1" value="2000" oninput="document.getElementById('demo').textContent = this.value;">
+        <p>Selected Year: <span id="demo">2000</span></p>
+      </div>
+    </div>
+
+    <!-- Global Temperatures on Land -->
+    <section id="map_section" class="my-5">
+      <h2 class="text-center">Global Temperatures on Land</h2>
+      <div id="map_chart" style="height: 800px;"></div>
+    </section>
+
+    <!-- Temperature Over the Years -->
+    <section id="line_section" class="my-5">
+      <h2 class="text-center">Temperature Over the Years</h2>
+      <div id="line_chart" style="height: 500px;"></div>
+    </section>
+
+    <!-- Annual Temperature Trends Over Time -->
+    <section id="scatter_section" class="my-5">
+      <h2 class="text-center">Annual Temperature Trends Over Time</h2>
+      <div id="scatterplot" style="height: 500px;"></div>
+    </section>
+
+    <!-- Decadal Average Temperatures by Country -->
+    <section id="bar_section" class="my-5">
+      <h2 class="text-center">Decadal Average Temperatures by Country</h2>
+      <div class="form-group">
+        <label for="countrySelect">Select Country:</label>
+        <select id="countrySelect" class="form-control"></select>
+      </div>
+      <div id="bar_chart" style="height: 500px;"></div>
+    </section>
+
+    <!-- Tooltip -->
+    <div id="tooltip" style="position: absolute; background: white; border: 1px solid gray; padding: 5px; display: none;"></div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
