@@ -54,7 +54,7 @@
       margin-top: 20px;
     }
     .chart-container {
-      margin-top: 20px;
+      margin-top: 10px;
     }
     .dropdown-container {
       display: flex;
@@ -109,38 +109,41 @@
 
   <!-- Main Content -->
   <div class="container">
-    <!-- Year Slider -->
-    <div class="row my-4">
-      <div class="col text-center">
-        <label for="year-slider">Select Year:</label>
-        <input id="year-slider" type="range" class="form-control-range" min="1700" max="2020" step="1" value="2000" oninput="document.getElementById('demo').textContent = this.value;">
-        <p>Selected Year: <span id="demo">2000</span></p>
-      </div>
-    </div>
+    <!-- Year Slider and CO2 Emissions Chart -->
+<!-- Title and Year Slider -->
+<div class="row my-5 py-4 " id="map_section">
+  <div class="col-md-6 d-flex align-items-center justify-content-center">
+    <h2 class="text-primary mb-0">CO2 Emissions on Land</h2>
+  </div>
+  <div class="col-md-6 d-flex flex-column align-items-center">
+    <label for="year-slider" class="h5 mb-3 text-primary">Select Year:</label>
+    <input id="year-slider" type="range" class="form-range w-75" min="1700" max="2020" step="1" value="2000" oninput="document.getElementById('demo').textContent = this.value;">
+    <p class="mt-3">Selected Year: <span id="demo" class="font-weight-bold text-primary">2000</span></p>
+  </div>
+</div>
 
-    <!-- Global Temperatures on Land -->
-    <section id="map_section" class="chart-container">
-      <h2 class="text-center">Global Temperatures on Land</h2>
-      <div id="map_chart" style="height: 800px;"></div>
-    </section>
+<!-- Full-Width Chart -->
+<section id="map_section" class="chart-container">
+  <div id="map_chart" style="height: 700px; background-color: #f8f9fa; border: 1px solid #ced4da; border-radius: .25rem;"></div>
+</section>
 
     <!-- Temperature Over the Years -->
-    <section id="line_section" class="chart-container">
-      <h2 class="text-center">Temperature Over the Years</h2>
+    <section id="line_section" class="chart-container my-5 py-4 mt-6">
+      <h2 class="text-center mt-5">Temperature Over the Years</h2>
       <div id="line_chart" style="height: 500px;"></div>
     </section>
 
     <!-- Annual Temperature Trends Over Time -->
-    <section id="scatter_section" class="chart-container">
-      <h2 class="text-center">Annual Temperature Trends Over Time</h2>
+    <section id="scatter_section" class="chart-container my-5 py-4 mt-6">
+      <h2 class="text-center mt-5">Annual Temperature Trends Over Time</h2>
       <div id="scatterplot" style="height: 500px;"></div>
     </section>
 
     <!-- Decadal Average Temperatures by Country -->
     <!-- Decadal Average Temperatures by Country -->
-<section id="bar_section" class="chart-container my-5 py-4">
+<section id="bar_section" class="chart-container my-5 py-4 mt-6">
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="text-primary mb-0">Decadal Average Temperatures by Country</h2>
+    <h2 class="text-primary mt-5 mb-0">Decadal Average Temperatures by Country</h2>
     <div class="form-group mb-0">
       <label for="countrySelect" class="h5 mr-2">Select Country:</label>
       <select id="countrySelect" class="form-control d-inline w-auto"></select>
